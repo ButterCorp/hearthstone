@@ -8,7 +8,7 @@
 
  Pour créer une app il faut lancer la commande (et être dans le même dossier que manage.py):
 
-    python manage.py startapp nomdelapp
+    docker-compose run --rm web python manage.py startapp nomdelapp
 
 Les Url des différentes apps sont souvent sous la dénomination hearthstone/app/...
 Du coup à la racine hearthstone je peux ajouter dans url.py mes urls de post par ex:
@@ -21,28 +21,29 @@ En gros django nous aide à mieux factoriser notre code, et c'est une bonne prat
  ## Migrations BDD :
  
 >
-	python manage.py makemigrations`
-	python manage.py migrate
+	docker-compose run --rm web python manage.py makemigrations
+	docker-compose run --rm web python manage.py migrate
 
 ## Filtres & Tips :
 
-Utiliser le shell pour test et importer le(s) Model à utiliser:
+Utiliser le shell pour test et importer le(s) Model à utiliser (ne pas oublier de migrate avant):
 
-	python manage.py shell
-	from manapy.models import Task
+	docker-compose run --rm web python manage.py shell
+	//le shell s'ouvre
+	from polls.models import Choice, Question
 
 
 Affichage :
 
-    Post.objects.all()
-    Post.objects.get(titre="Salut")
-    Post.objects.filter(auteur="le King")
-    Post.objects.exclude(auteur="le King")
+    Question.objects.all()
+    Question.objects.get(question_text = "Youyou est-il vraiment le plus fort?")
+    Question.objects.filter(question_text = "Youyou est-il vraiment le plus fort?")
+    Question.objects.exclude(auteur="Youyou est-il vraiment le plus fort?")
 
 Pour la date on importe timezone, et on peut utiliser le double underscore pour séparer les relations
 
     from django.utils import timezone
-	Post.objects.filter(created_at__lt=timezone.now()) 
+	q.pub_date = timezone.now()
 
 >lt = less than |gt = greater than
 

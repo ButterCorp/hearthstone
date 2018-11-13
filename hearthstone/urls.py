@@ -13,10 +13,11 @@ urlpatterns = [
     path('hero/<int:hero_id>', views.hero, name='hero'),
     path('sell-hero/<int:herouser_id>', views.sellHero, name='sellHero'),
     path('buy-heroes/', views.buyHero, name='buyHero'),
-    path('my-heroes/', views.myHeroes, name='myHeroes'),
+    path('my-cards/', views.myHeroes, name='myCards'),
     path('my-decks/', views.myDecks, name='myDecks'),
     path('deck/<int:deck_id>', views.deck, name='deck'),
     path('deck/delete/<int:deck_id>', views.deleteDeck, name='deckDelete'),
     path('deck/update/<int:deck_id>', views.updateDeck, name='deckUpdate'),
     path('deck/create', views.createDeck, name='deckCreate'),
+    path('deck/create/<int:hero_id>', views.createDeckByHero, name='createDeckByHero'),
 ]

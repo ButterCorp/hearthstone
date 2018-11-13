@@ -49,7 +49,7 @@ def index(request):
                     rarity= card.get("rarity",0)
                 )
                 
-    return HttpResponse("G g .")
+    return render(request, 'hearthstone/index.html')
 
 def home(request):
     title = 'Accueil'
@@ -140,6 +140,17 @@ def deck(request, deck_id):
 
 
 def createDeck(request):
+
+    heros = Hero.objects.all()
+
+    return render(request, 'hearthstone/create-deck.html', {'heros': heros})
+
+def createDeckByHero(request, hero_id):
+
+    hero = Hero.objects.get(pk=hero_id)
+    minions = Minion.objects.filter(playerClass__in=[hero.playerClass, 'Neutral'])
+    spells = Spell.objects.filter(playerClass__in=[hero.playerClass, "Neutral"])
+
     if request.POST:
         form = DeckForm(request.POST)
         if form.is_valid():
@@ -154,7 +165,9 @@ def createDeck(request):
             return redirect('deck', deck.pk)
     else:
         form = DeckForm()
-    return render(request, 'hearthstone/create-deck.html', {'form': form})
+
+    return render(request, 'hearthstone/create-deck-by-hero.html', {'form': form, 'minions': minions, 'spells': spells, 'hero': hero.playerClass})
+    
 
 
 def deleteDeck(request, deck_id):

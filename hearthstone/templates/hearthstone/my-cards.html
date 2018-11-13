@@ -3,15 +3,11 @@
 {% block content %}
 <div class="row my-5">
   <div class="col-md-12">
-    <h1>Votre collection de cartes</h1>
-
+    <h1>Votre collection de cartes</h1> {{ heroes }}
     <div class="row">
       {% for card in cards %}
       <div class="col-3 text-center single-card my-4">
-        <a class="single-card__link" href="{% url 'card' card.id %}">
-          <h4>{{ card.title }}</h4>
-          <img src="https://res.cloudinary.com/dglr48luk/image/upload/c_scale,q_auto:eco,w_235/v1540542198/django/{{ card.slug }}.png" alt="{{ card.title }}" class="single-card__link__img">
-        </a>
+          <img src="{{ card.card.img_url }}" alt="..." class="img-thumbnail">
       </div>
       {% empty %}
       <div class="col">

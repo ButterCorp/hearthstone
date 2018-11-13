@@ -93,15 +93,15 @@ def party(request):
     return render(request, 'hearthstone/party.html')
 
 def buyCards(request):
-    Minions = Minion.objects.all().count()
-    heroes = []
+    cardsCounter = Card.objects.all().count()
+    cards = []
     if request.user.is_authenticated and request.user.profile.credit >= 100:
         for i in range(8):
-            random_index = randint(0, heroCounter - 1)
-            hero = Minion.objects.all()[random_index]
-            heroes.append(hero)
-            userHero = UserMinion(user=request.user, minion = hero)
-            userHero.save()
+            random_index = randint(0, cardsCounter - 1)
+            card = Card.objects.all()[random_index]
+            cards.append(card)
+            userCard = UserCard(user=request.user, card = card)
+            userCard.save()
         request.user.profile.credit -= 100
         request.user.save()
     elif request.user.is_authenticated and request.user.profile.credit < 100:
@@ -111,7 +111,7 @@ def buyCards(request):
         messages.warning(request, f'Vous devez être connecté pour accéder à cette page')
         return redirect('home')
 
-    return render(request, 'hearthstone/buy-heroes.html', {'heroes': heroes})
+    return render(request, 'hearthstone/buy-cards.html', {'cards': cards})
 
 def sellCard(request, carduser_id):
     card = get_object_or_404(CardUser, pk=carduser_id)
@@ -122,14 +122,9 @@ def sellCard(request, carduser_id):
 
 
 def myCards(request):
-    userHeroes = UserHero.objects.all().filter(user_id=request.user.id)
-    myHeroes = []
+    cards = UserCard.objects.filter(user_id=request.user.id)
 
-    for userHero in userHeroes:
-        hero = userHero.hero
-        myHeroes.append(hero)
-
-    return render(request, 'hearthstone/my-heroes.html', {'heroes': myHeroes})
+    return render(request, 'hearthstone/my-cards.html', {'cards': cards})
 
 
 def myDecks(request):

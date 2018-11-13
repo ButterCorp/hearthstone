@@ -27,36 +27,35 @@ class Deck(models.Model):
     def __str__(self):
         return self.title
 
+class Card(models.Model):
+    name = models.TextField(max_length=30, blank=False)
+    playerClass = models.TextField(max_length=50, blank=False)
+    cost = models.IntegerField(default=0)
+    img_url = models.TextField(max_length=255, blank=True)
+
+    def __str__(self):
+        return self.title
+
 class Hero(models.Model):
     name = models.TextField(max_length=30, blank=False)
     playerClass = models.TextField(max_length=50, blank=False, default="NaN")
+    def __str__(self):
+        return self.name
+
+class Minion(Card):
+    attack = models.IntegerField()
+    health = models.IntegerField()
+    rarity = models.TextField(max_length=30, blank=True)
 
     def __str__(self):
         return self.name
 
-class Minion(models.Model):
-    name = models.TextField(max_length=50, blank=False)
-    cost = models.IntegerField(default=0)
-    attack = models.IntegerField()
-    health = models.IntegerField()
-    rarity = models.TextField(max_length=30, blank=True)
-    playerClass = models.TextField(max_length=50, blank=False)
+class Spell(Card):
 
-class Spell(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.TextField(max_length=50, blank=False)
-    cost = models.IntegerField(default=0)
-    playerClass = models.TextField(max_length=50, blank=False)
+    def __str__(self):
+        return self.name
 
-class UserHero(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    hero = models.ForeignKey(Hero, on_delete=models.CASCADE)
-
-class UserMinion(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    minion = models.ForeignKey(Minion, on_delete=models.CASCADE)
-
-class UserSpell(models.Model):
+class UserCard(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     spell = models.ForeignKey(Spell, on_delete=models.CASCADE)
 
@@ -64,13 +63,9 @@ class DeckHero(models.Model):
     deck = models.ForeignKey(Deck, on_delete=models.DO_NOTHING)
     hero = models.ForeignKey(Hero, on_delete=models.DO_NOTHING)
 
-class DeckMinion(models.Model):
+class DeckCard(models.Model):
     deck = models.ForeignKey(Deck, on_delete=models.DO_NOTHING)
-    minion = models.ForeignKey(Minion, on_delete=models.DO_NOTHING)
-
-class DeckSpell(models.Model):
-    deck = models.ForeignKey(Deck, on_delete=models.DO_NOTHING)
-    spell = models.ForeignKey(Spell, on_delete=models.DO_NOTHING)
+    card = models.ForeignKey(Card, on_delete=models.DO_NOTHING)
     
 class Party(models.Model):
     attaquant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Attaquant')

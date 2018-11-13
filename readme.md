@@ -1,3 +1,14 @@
+ # Reproduction fidèle d'hearthstone en Django
+ ## Installation
+	
+	docker-compose up
+
+	docker-compose exec web python manage.py migrate
+
+## Get started
+
+Let's navigate to http://localhost:8000
+
  # Philosophie Django
  
  Installation sur windows, suivre ce tutoriel docker pour ne pas s'embourber avec les endpoints :

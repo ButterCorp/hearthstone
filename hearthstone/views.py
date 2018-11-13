@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 import json
 import os
-from hearthstone.models import Hero, Minion, Spell, UserHero, Deck, Party
+from hearthstone.models import Hero, Minion, Spell, UserHero, Deck, Party, UserMinion
 from random import randint
 from pprint import pprint
 from django.shortcuts import render, redirect, get_object_or_404
@@ -82,14 +82,14 @@ def hero(request, hero_id):
     return render(request, 'hearthstone/card.html', {'card': card, 'cardUser':cardUser})
 
 def buyHero(request):
-    heroCounter = Hero.objects.all().count()
+    heroCounter = Minion.objects.all().count()
     heroes = []
     if request.user.is_authenticated and request.user.profile.credit >= 100:
         for i in range(8):
-            random_index = randint(0, cardCounter - 1)
-            hero = Hero.objects.all()[random_index]
-            heroes.append(card)
-            userHero = UserHero(card=card, user=request.user)
+            random_index = randint(0, heroCounter - 1)
+            hero = Minion.objects.all()[random_index]
+            heroes.append(hero)
+            userHero = UserMinion(user=request.user, minion = hero)
             userHero.save()
         request.user.profile.credit -= 100
         request.user.save()
@@ -100,14 +100,14 @@ def buyHero(request):
         messages.warning(request, f'Vous devez être connecté pour accéder à cette page')
         return redirect('home')
 
-    return render(request, 'hearthstone/buy-cards.html', {'cards': cards})
+    return render(request, 'hearthstone/buy-heroes.html', {'heroes': heroes})
 
 def sellHero(request, carduser_id):
     card = get_object_or_404(CardUser, pk=carduser_id)
     card.delete()
     request.user.profile.credit += 10
     request.user.save()
-    return redirect('myCards')
+    return redirect('myHeroes')
 
 
 def myHeroes(request):
@@ -118,7 +118,7 @@ def myHeroes(request):
         hero = userHero.hero
         myHeroes.append(hero)
 
-    return render(request, 'hearthstone/my-cards.html', {'cards': cards})
+    return render(request, 'hearthstone/my-heroes.html', {'heroes': myHeroes})
 
 
 def myDecks(request):

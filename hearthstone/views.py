@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 import json
 import os
-from hearthstone.models import Hero, Minion, Spell, UserHero, Deck, Party, UserMinion
+from hearthstone.models import Hero, Minion, Card, Spell, Deck, Party, UserCard
 from random import randint
 from pprint import pprint
 from django.shortcuts import render, redirect, get_object_or_404
@@ -9,6 +9,7 @@ from django.template import loader
 from .forms import UserRegisterForm
 from .forms import DeckForm
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 
 def index(request):
     if not Hero.objects.all():
@@ -18,12 +19,15 @@ def index(request):
             data = json.load(f)
 
         for card in data["Basic"]:
-                if card["type"] == "Spell" or card["type"] == "Enchantment":
+                #enchantements not used
+                if card["type"] == "Spell":
 
                     Spell.objects.create(
                         name=card.get("name"),
                         playerClass=card.get("playerClass"),
-                        cost=card.get("cost",0)
+                        cost=card.get("cost",0),
+                        img_url=card.get("img", "https://i.imgur.com/U1dkXzQ.png"),
+                        rarity= card.get("rarity","NAN"),
                     )
 
                 elif card["type"] == "Hero":
@@ -46,7 +50,8 @@ def index(request):
                     attack=card.get("attack",0),
                     health=card.get("health",1),
                     playerClass=card.get("playerClass"),
-                    rarity= card.get("rarity",0)
+                    rarity= card.get("rarity","NAN"),
+                    img_url=card.get("img","https://i.imgur.com/U1dkXzQ.png"),
                 )
                 
     return render(request, 'hearthstone/index.html')
@@ -62,12 +67,23 @@ def home(request):
 
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_user = form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Hello {username}, votre compte a bien été créé !')
+            new_user = authenticate(
+                username = username,
+                password=form.cleaned_data['password1'],
+            )
+            login(request, new_user)
+            for c in Card.objects.filter(rarity="Free"):
+                UserCard.objects.create(user = new_user, card = c)
+        
             return redirect('home')
     else:
         form = UserRegisterForm()
@@ -76,13 +92,8 @@ def register(request):
 def party(request):
     return render(request, 'hearthstone/party.html')
 
-def hero(request, hero_id):
-    hero = get_object_or_404(Card, pk=card_id)
-    userHero = UserHero.objects.all().filter(user_id=request.user.id, hero_id=hero_id).first()
-    return render(request, 'hearthstone/card.html', {'card': card, 'cardUser':cardUser})
-
-def buyHero(request):
-    heroCounter = Minion.objects.all().count()
+def buyCards(request):
+    Minions = Minion.objects.all().count()
     heroes = []
     if request.user.is_authenticated and request.user.profile.credit >= 100:
         for i in range(8):
@@ -102,15 +113,15 @@ def buyHero(request):
 
     return render(request, 'hearthstone/buy-heroes.html', {'heroes': heroes})
 
-def sellHero(request, carduser_id):
+def sellCard(request, carduser_id):
     card = get_object_or_404(CardUser, pk=carduser_id)
     card.delete()
     request.user.profile.credit += 10
     request.user.save()
-    return redirect('myHeroes')
+    return redirect('myCards')
 
 
-def myHeroes(request):
+def myCards(request):
     userHeroes = UserHero.objects.all().filter(user_id=request.user.id)
     myHeroes = []
 

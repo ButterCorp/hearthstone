@@ -32,20 +32,21 @@ class Card(models.Model):
     playerClass = models.TextField(max_length=50, blank=False)
     cost = models.IntegerField(default=0)
     img_url = models.TextField(max_length=255, blank=True)
+    rarity = models.TextField(max_length=30, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.name
 
 class Hero(models.Model):
     name = models.TextField(max_length=30, blank=False)
     playerClass = models.TextField(max_length=50, blank=False, default="NaN")
+
     def __str__(self):
         return self.name
 
 class Minion(Card):
     attack = models.IntegerField()
     health = models.IntegerField()
-    rarity = models.TextField(max_length=30, blank=True)
 
     def __str__(self):
         return self.name
@@ -57,7 +58,7 @@ class Spell(Card):
 
 class UserCard(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    spell = models.ForeignKey(Spell, on_delete=models.CASCADE)
+    card = models.ForeignKey(Card, on_delete=models.CASCADE)
 
 class DeckHero(models.Model):
     deck = models.ForeignKey(Deck, on_delete=models.DO_NOTHING)

@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 import json
 import os
+from django.shortcuts import render, redirect
 from hearthstone.models import Hero, Minion, Spell
 
 def index(request):
@@ -44,3 +45,7 @@ def index(request):
                 
 
     return HttpResponse("G g .")
+
+def deck(request):
+    heros = Hero.objects.all()
+    return render(request, 'deck/deck.html', {'heros': heros})

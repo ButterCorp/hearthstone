@@ -7,7 +7,6 @@ from pprint import pprint
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
 from .forms import UserRegisterForm
-from .forms import DeckForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 
@@ -134,13 +133,11 @@ def myDecks(request):
 
 
 def deck(request, deck_id):
-    deck = get_object_or_404(Deck, pk=deck_id)
+    deck = get_object_or_404(Deck, pk=deck_id)# get deck passed in argument
+    
+    idCards = deck.cards
 
-    cardsDeck = CardDeck.objects.all().filter(deck_id=deck_id)
-    cards = []
-
-    for card in cardsDeck:
-        cards.append(card.card)
+    cards = Card.objects.filter(id__in=json.loads(idCards))
 
     return render(request, 'hearthstone/deck.html', {'cards': cards, 'deck': deck})
 
@@ -154,25 +151,28 @@ def createDeck(request):
 def createDeckByHero(request, hero_id):
 
     hero = Hero.objects.get(pk=hero_id)
-    minions = Minion.objects.filter(playerClass__in=[hero.playerClass, 'Neutral'])
-    spells = Spell.objects.filter(playerClass__in=[hero.playerClass, "Neutral"])
+    cards = Card.objects.filter(playerClass__in=[hero.playerClass, 'Neutral'])
+    finished = False;
 
     if request.POST:
-        form = DeckForm(request.POST)
-        if form.is_valid():
-            deck = Deck()
-            deck = form.save(commit=False)
-            deck.user = request.user
-            deck.save()
+        title = request.POST.get("title", "")
+        cards = request.POST.getlist("cards", "")
 
-            title = form.cleaned_data.get('title')
-            messages.success(request, f'Le deck {title} a bien été créé !')
+        cards = list(map(int, cards))
 
-            return redirect('deck', deck.pk)
-    else:
-        form = DeckForm()
+        if len(cards) == 30:
+            finished = True;
 
-    return render(request, 'hearthstone/create-deck-by-hero.html', {'form': form, 'minions': minions, 'spells': spells, 'hero': hero.playerClass})
+        newDeck = Deck.objects.create(
+            user=request.user,
+            title=title,
+            cards=json.dumps(cards),
+            finished=finished
+        )
+
+        messages.success(request, f'Le deck {title} a bien été créé !')      
+
+    return render(request, 'hearthstone/create-deck-by-hero.html', {'cards': cards})
     
 
 
@@ -186,15 +186,16 @@ def deleteDeck(request, deck_id):
 
 def updateDeck(request, deck_id):
     if request.POST:
-        deck = get_object_or_404(Deck, pk=deck_id)
-        cards = request.POST.items()
+        deck = get_object_or_404(Deck, pk=deck_id)# get deck passed in argument
+    
+        idCards = deck.cards
 
-        cardDeck = CardDeck.objects.all().filter(deck_id=deck_id)
+        cards = Card.objects.filter(id__in=json.loads(idCards))
 
-        for cardDeck in cardDeck:
-            cardDeck.delete()
+        for card in cards:
+            card.delete()
 
-        for key, value in cards:
+        for key, value in cardsRequesteds:
             if key[:4] == 'card':
                 cardId = key.split('_')[1]
 
@@ -205,20 +206,12 @@ def updateDeck(request, deck_id):
 
         return redirect('deck', deck.pk)
     else:
-        deck = get_object_or_404(Deck, pk=deck_id)
+        deck = get_object_or_404(Deck, pk=deck_id)# get deck passed in argument
+    
+        idCards = deck.cards#id des cartes du deck
 
-        cardsUser = CardUser.objects.all().filter(user_id=request.user.id)
-        cards = []
+        cardsUser = UserCard.objects.filter(user_id=request.user.id)#cartes de l'user
+        cardsDeck = Card.objects.filter(id__in=json.loads(idCards))#cartes du deck
 
-        cardsDeck = CardDeck.objects.all().filter(deck_id=deck_id)
-        cardsUsed = []
-
-        for card in cardsDeck:
-            cardsUsed.append(card.card.pk)
-
-        for cardUser in cardsUser:
-            card = cardUser.card
-            cards.append(card)
-
-        return render(request, 'hearthstone/update-deck.html', {'cards': cards, 'deck': deck, 'cardsUsed' : cardsUsed})
+        return render(request, 'hearthstone/update-deck.html', {'cards': cardsUser, 'deck': deck, 'cardsUsed' : cardsDeck})
 

@@ -7,13 +7,24 @@
 
     <form method="post">
       {% csrf_token %}
-        {{ form }}
+      
       <div class="form-group">
-        <button class="btn btn-outline-primary" type="submit">Creer un nouveau deck</button>
+        <label for="title">Titre</label>
+        <input type="text" name="title" class="form-control col-md-3" id="title">
+        <button class="btn btn-outline-primary mt-3" type="submit">Creer un nouveau deck</button>
       </div> 
-      {% for m in minions %}
-        {{m.name}} , {{m.playerClass}} <br>
-      {% endfor %}
+      <div class="row">
+          <select multiple="multiple" class="image-picker show-html" name="cards">
+            {% for card in cards %}
+            <div class="col-3 text-center single-card my-4">
+                <option data-img-src="{{ card.img_url }}" class="img-thumbnail" value="{{ card.id }}">
+                  {{ card.card.name }}
+                </option>
+            </div>
+            {% endfor %}
+          </select>
+      </div>
+
     </form>
   </div>
 </div>

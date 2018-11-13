@@ -7,7 +7,7 @@
     <div class="row">
       {% for card in cards %}
       <div class="col-3 text-center single-card my-4">
-          <img src="{{ card.card.img_url }}" alt="..." class="img-thumbnail">
+          <img src="{{ card.card.img_url }}" alt="{{ card.card.name }}" class="img-thumbnail">
       </div>
       {% empty %}
       <div class="col">

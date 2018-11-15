@@ -85,18 +85,21 @@
 
 <div class="container content">
   <div class="content-inside">
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-      {{ message }}
-    </div>
-    {% endfor %}
-    {% endif %}
 
-    {% block content %}{% endblock %}
+    {% if messages %}
+
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+
+    {% endif %}
   </div>
 </div>
-
+<div class="block-content">
+    {% block content %}{% endblock %}
+</div>
 
 <!-- Footer -->
 <footer class="bg-red">

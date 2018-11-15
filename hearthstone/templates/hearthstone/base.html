@@ -12,7 +12,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/image-picker/0.3.0/image-picker.min.css">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
-  <link rel="stylesheet" href="{% static 'hearthstone/main.css' %}">
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
 
   {% if title %}
   <title>Hearthstone - {{ title }}</title>
@@ -23,7 +24,7 @@
 <body>
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-red bg-red fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <div class="container">
     <a class="navbar-brand" href="{% url 'home' %}">Hearthstone</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,19 +42,27 @@
         </li>
         {% else %}
         <li class="nav-item">
-          <a class="nav-link">Bonjour {{ request.user.username }}</a>
+          <a class="nav-link">
+            <span class="text-center text-capitalize"><h3>{{ request.user.username }} :</h3></span>
+          </a>
         </li>
         <span class="flex-centered text-light">|</span>
         <li class="nav-item">
-          <a class="nav-link">Poussieres : {{ request.user.profile.credit }}</a>
+          <a class="nav-link">
+              <button class="btn btn-outline-info">Poussieres : {{ request.user.profile.credit }}</button>
+          </a>
         </li>
         <span class="flex-centered text-light">|</span>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'myCards' %}">Mes cartes</a>
+          <a class="nav-link" href="{% url 'myCards' %}">
+              <button class="btn btn-outline-success">Cartes</button>
+          </a>
         </li>
         <span class="flex-centered text-light">|</span>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'myDecks' %}">Mes decks</a>
+          <a class="nav-link" href="{% url 'myDecks' %}">
+              <button class="btn btn-outline-primary">Decks</button>
+          </a>
         </li>
         {% if request.user.is_staff %}
         <span class="flex-centered text-light">|</span>
@@ -63,7 +72,9 @@
         {% endif %}
         <span class="flex-centered text-light">|</span>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'app_logout' %}">Se déconnecter</a>
+          <a class="nav-link" href="{% url 'app_logout' %}">
+              <button class="btn btn-outline-danger">Deconnexion</button>
+          </a>
         </li>
         {% endif %}
       </ul>
@@ -74,18 +85,21 @@
 
 <div class="container content">
   <div class="content-inside">
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-      {{ message }}
-    </div>
-    {% endfor %}
-    {% endif %}
 
-    {% block content %}{% endblock %}
+    {% if messages %}
+
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+
+    {% endif %}
   </div>
 </div>
-
+<div class="block-content">
+    {% block content %}{% endblock %}
+</div>
 
 <!-- Footer -->
 <footer class="bg-red">

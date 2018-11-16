@@ -9,6 +9,7 @@ from django.template import loader
 from .forms import UserRegisterForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import PasswordChangeForm
 
 def index(request):
     if not Hero.objects.all():
@@ -66,6 +67,20 @@ def home(request):
     }
     return render(request, 'hearthstone/index.html', context)
 
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'registration/change_password.html', {
+        'form': form
+    })
 
 def register(request):
     if request.user.is_authenticated:

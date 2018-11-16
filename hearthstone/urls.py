@@ -11,7 +11,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='app_logout'),
     path('party/', views.party, name='game'),
     path('sell-card/<int:herouser_id>', views.sellCard, name='sellCard'),
-    path('buy-cards/', views.buyCards, name='buyCards'),
+    path('buy-cards/<extension>', views.buyCards, name='buyCards'),
     path('shop/', views.shop, name='shop'),
     path('my-cards/', views.myCards, name='myCards'),
     path('my-decks/', views.myDecks, name='myDecks'),

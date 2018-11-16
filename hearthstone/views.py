@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import json
 import os
 from hearthstone.models import Hero, Minion, Card, Spell, Deck, Party, UserCard
@@ -93,13 +93,13 @@ def register(request):
 def party(request):
     return render(request, 'hearthstone/party.html')
 
-def buyCards(request):
-    cardsCounter = Card.objects.all().count()
+def buyCards(request, extension):
+    cardsCounter = Card.objects.filter(extension=extension).count()
     cards = []
     if request.user.is_authenticated and request.user.profile.credit >= 100:
         for i in range(8):
             random_index = randint(0, cardsCounter - 1)
-            card = Card.objects.all()[random_index]
+            card = Card.objects.filter(extension=extension)[random_index]
             cards.append(card)
             userCard = UserCard(user=request.user, card = card)
             userCard.save()
@@ -112,7 +112,9 @@ def buyCards(request):
         messages.warning(request, f'Vous devez être connecté pour accéder à cette page')
         return redirect('home')
 
-    return render(request, 'hearthstone/buy-cards.html', {'cards': cards})
+    #return render(request, 'hearthstone/buy-cards.html', {'cards': cards})
+    #return HttpResponse(json.dumps(str(cards)))
+    return JsonResponse(json.dumps( str(cards) ), safe=False)
 
 def sellCard(request, carduser_id):
     card = get_object_or_404(CardUser, pk=carduser_id)
@@ -159,6 +161,7 @@ def createDeckByHero(request, hero_id):
     if request.POST:
         title = request.POST.get("title", "")
         cards = request.POST.getlist("cards", "")
+        playerClass = hero.playerClass
 
         cards = list(map(int, cards))
 
@@ -169,10 +172,15 @@ def createDeckByHero(request, hero_id):
             user=request.user,
             title=title,
             cards=json.dumps(cards),
+            playerClass=playerClass,
             finished=finished
         )
 
-        messages.success(request, f'Le deck {title} a bien été créé !')      
+        messages.success(request, f'Le deck {title} a bien été créé !')   
+
+        decksUser = Deck.objects.all().filter(user_id=request.user.id)
+
+        return render(request, 'hearthstone/my-decks.html', {'decks': decksUser})   
 
     return render(request, 'hearthstone/create-deck-by-hero.html', {'cards': cards})
     

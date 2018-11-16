@@ -1,5 +1,7 @@
 {% extends "hearthstone/base.html" %}
 
+{% load static %}
+
 {% block content %}
 
 <div class="container">
@@ -12,6 +14,7 @@
           <div class="row">
             {% for deck in decks %}
             <div class="col-3 text-center my-4">
+              <img class="card-img-top" src="{% static 'img/hearthstone-portrait-'%}{{ deck.playerClass }}.png" alt="Card image cap">
               <a href="{% url 'deck' deck.id %}">{{deck.title}}</a>
             </div>
             {% empty %}

@@ -27,6 +27,7 @@ def index(request):
                         cost=card.get("cost",0),
                         img_url=card.get("img", "https://i.imgur.com/U1dkXzQ.png"),
                         rarity= card.get("rarity","NAN"),
+                        extension="Basic",
                     )
 
                 elif card["type"] == "Hero":
@@ -51,6 +52,7 @@ def index(request):
                     playerClass=card.get("playerClass"),
                     rarity= card.get("rarity","NAN"),
                     img_url=card.get("img","https://i.imgur.com/U1dkXzQ.png"),
+                    extension=deck
                 )
                 
     return render(request, 'hearthstone/index.html')
@@ -207,11 +209,12 @@ def updateDeck(request, deck_id):
         return redirect('deck', deck.pk)
     else:
         deck = get_object_or_404(Deck, pk=deck_id)# get deck passed in argument
-    
-        idCards = deck.cards#id des cartes du deck
-
         cardsUser = UserCard.objects.filter(user_id=request.user.id)#cartes de l'user
-        cardsDeck = Card.objects.filter(id__in=json.loads(idCards))#cartes du deck
+        cardsDeck = Card.objects.filter(id__in=json.loads(deck.cards))#cartes du deck
 
         return render(request, 'hearthstone/update-deck.html', {'cards': cardsUser, 'deck': deck, 'cardsUsed' : cardsDeck})
+
+def shop(request):
+
+    return render(request, 'hearthstone/shop.html')
 

@@ -42,6 +42,7 @@ class Card(models.Model):
     cost = models.IntegerField(default=0)
     img_url = models.TextField(max_length=255, blank=True)
     rarity = models.TextField(max_length=30, blank=True)
+    extension = models.TextField(max_length=60, blank=False, default="Basic")
 
     def __str__(self):
         return self.name

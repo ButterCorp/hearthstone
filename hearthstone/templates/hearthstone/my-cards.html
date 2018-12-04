@@ -120,49 +120,65 @@ body {
 {% block content %}
 <h1>Isotope - combination filters with toggle buttons</h1>
 <h3>Color</h3>
-<div id="filters" class="button-group js-radio-button-group">
-  <button class="button" data-filter=".Rogue">Voleur</button>
-  <button class="button" data-filter=".Priest">Prêtre</button>
-  <button class="button" data-filter=".Paladin">Paladin</button>
-  <button class="button" data-filter=".Warlock">Démoniste</button>
-  <button class="button" data-filter=".Mage">Mage</button>
-  <button class="button" data-filter=".Hunter">Chasseur</button>
-  <button class="button" data-filter=".Warrior">Guerrier</button>
-  <button class="button" data-filter=".Shaman">Chaman</button>
-  <button class="button" data-filter=".Drood">Druide</button>
-  <button class="button" data-filter=".Neutral">Neutre</button>
+
+<div id="filter">
+
+  <input type="text" class="quicksearch" placeholder="Filter search...">
+
+  <div class="togglelist">
+    <a href="#" class="toggle-button"><span></span></a>
+  </div>
+
+  <div class="button-group" data-filter-group="type">
+    <button class="button is-checked" data-filter="*">show all</button>
+    <button class="button" data-filter=".Rogue">Voleur</button>
+    <button class="button" data-filter=".Priest">Prêtre</button>
+    <button class="button" data-filter=".Paladin">Paladin</button>
+    <button class="button" data-filter=".Warlock">Démoniste</button>
+    <button class="button" data-filter=".Mage">Mage</button>
+    <button class="button" data-filter=".Hunter">Chasseur</button>
+    <button class="button" data-filter=".Warrior">Guerrier</button>
+    <button class="button" data-filter=".Shaman">Chaman</button>
+    <button class="button" data-filter=".Druid">Druide</button>
+    <button class="button" data-filter=".Neutral">Neutre</button>
+    <button class="button" data-filter=".Spell">Spell</button>
+  </div>
 </div>
-<h2>Sort</h2>
-<div id="sorts" class="button-group">  
-  <button class="button is-checked" data-sort-by="original-order">original order</button>
-  <button class="button" data-sort-by="cost">cout</button>
+
+<div id="sorts">
+  <div class="row">
+    <div class="column button-group">
+      <h3>Sort</h3>
+      <button class="button secondary" data-sort-by="original-order"> Original order</button>
+      <button class="button" data-sort-by="cost" data-sort-direction="asc"> Cost</button>
+    </div>
+  </div>
 </div>
-
-
-<p>
-  <button class="reset-button button">Reset</button>
-</p>
-
   
-<div class="grid">
-  
-  <div class="row my-5">
-    <div class="col-md-12">
-      <h1>Votre collection de cartes</h1> {{ heroes }}
-      <div class="row">
-        {% for card in cards %}
-        <div class="player_class col-3 text-center single-card my-4 {{ card.card.playerClass }}">
-          <p hidden class="cost">{{ card.card.cost}} </p>
-          <img src="{{ card.card.img_url }}" alt="{{ card.card.name }}" class="img-thumbnail">
+
+<div class="container">
+  <div class="grid">
+    
+    <div class="row my-5">
+      <div class="col-md-12">
+        <h1>Votre collection de cartes</h1> {{ heroes }}
+        <div class="row">
+          {% for card in cards %}
+          <div class="player_class col-3 text-center single-card my-4 {{ card.card.playerClass }}">
+            <p hidden class="cost">{{ card.card.cost}} </p>
+            <p hidden class="name">{{ card.card.name}}</p>
+            <img src="{{ card.card.img_url }}" alt="{{ card.card.name }}" class="img-thumbnail">
+          </div>
+          {% empty %}
+          <div class="col">
+            Vous n'avez pas encore de cartes.
+          </div>
+          {% endfor %}
         </div>
-        {% empty %}
-        <div class="col">
-          Vous n'avez pas encore de cartes.
-        </div>
-        {% endfor %}
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
 
 <script
@@ -174,34 +190,102 @@ body {
 <!-- or -->
 <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
 <script>
-// init Isotope
-// init Isotope
-var $grid = $('.grid').isotope({
-  itemSelector: '.player_class',
-  getSortData: {
-    cost: '.cost parseInt'
-  }
-});
 
-// bind filter button click
-$('#filters').on( 'click', 'button', function() {
-  var filterValue = $( this ).attr('data-filter');
-  $grid.isotope({ filter: filterValue });
-});
 
-// bind sort button click
-$('#sorts').on( 'click', 'button', function() {
-  var sortByValue = $(this).attr('data-sort-by');
-  $grid.isotope({ sortBy: sortByValue });
-});
 
-// change is-checked class on buttons
-$('.button-group').each( function( i, buttonGroup ) {
-  var $buttonGroup = $( buttonGroup );
-  $buttonGroup.on( 'click', 'button', function() {
-    $buttonGroup.find('.is-checked').removeClass('is-checked');
-    $( this ).addClass('is-checked');
+
+$(document).ready( function() {
+
+// -------- Initialize Isotope ----------//
+$( function() {
+  // quick search regex
+  var qsRegex;
+  var buttonFilter;
+
+  var isoOptions = {
+      itemSelector: '.player_class',
+      filter: function() {
+        var $this = $(this);
+        var searchResult = qsRegex ? $this.text().match( qsRegex ) : true;
+        var buttonResult = buttonFilter ? $this.is( buttonFilter ) : true;
+        return searchResult && buttonResult;
+      },
+      getSortData: {
+        cost: '.cost parseInt'
+          }
+  };
+
+  // -------- List FUNCTION ----------//
+    var isIsotopeEnabled = true;
+    
+    // init Isotope
+    var $container = $('.grid').isotope( isoOptions );
+
+    
+
+    $('.toggle-button').click(function(){
+      $('.grid').toggleClass('listme');
+      $('.togglelist').toggleClass('toggleactive');
+    });
+
+
+  // -------- Filter FUNCTION ----------//
+  var filters = {};
+
+  $('#filter').on( 'click', '.button', function() {
+    var $this = $(this);
+    var $buttonGroup = $this.parents('.button-group');
+    var filterGroup = $buttonGroup.attr('data-filter-group');
+    filters[ filterGroup ] = $this.attr('data-filter');
+    var filterValue = '';
+    for ( var prop in filters ) {
+      filterValue += filters[ prop ];
+    }
+    buttonFilter = filterValue;
+    $container.isotope();
   });
+
+  // -------- Sort FUNCTION ----------//
+  $('#sorts').on( 'click', '.button', function() {
+    var sortByValue = $(this).attr('data-sort-by');
+    $container.isotope({ sortBy: sortByValue });
+  });
+  
+  // -------- Search FUNCTION ----------//
+  var $quicksearch = $('.quicksearch').keyup( debounce( function() {
+    qsRegex = new RegExp( $quicksearch.val(), 'gi' );
+    $container.isotope();
+  }) );
+
+  
+  // -------- Active buttons ----------//
+  $('.button-group').each( function( i, buttonGroup ) {
+    var $buttonGroup = $( buttonGroup );
+    $buttonGroup.on( 'click', 'button', function() {
+      $buttonGroup.find('.secondary').removeClass('secondary');
+      $( this ).addClass('secondary');
+      $buttonGroup.find('.is-checked').removeClass('is-checked');
+      $( this ).addClass('is-checked');
+    });
+  });
+  
 });
 
+// -------- Debounce so filtering doesn't happen every millisecond ----------//
+function debounce( fn, threshold ) {
+  var timeout;
+  return function debounced() {
+    if ( timeout ) {
+      clearTimeout( timeout );
+    }
+    function delayed() {
+      fn();
+      timeout = null;
+    }
+    setTimeout( delayed, threshold || 100 );
+  };
+}
+
+
+});
 </script>

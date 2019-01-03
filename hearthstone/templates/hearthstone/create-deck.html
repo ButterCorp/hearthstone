@@ -1,0 +1,23 @@
+{% extends "hearthstone/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="row my-5">
+  <div class="col-md-12">
+    <h1>Nouveau deck</h1>
+    <div class="row p-1">
+      {% for h in heros %}
+          <div class="card col-md-3 p-3" style="width: 18rem;">
+            <a href="{% url 'createDeckByHero' h.id %}">
+                <img class="card-img-top" src="{% static 'img/hearthstone-portrait-'%}{{ h.playerClass }}.png" alt="Card image cap">
+            </a>
+              <div class="card-body">
+                  <p class="card-text text-center">{{ h.name }}</p>
+              </div>
+          </div>
+      {% endfor %}
+  </div>
+  </div>
+</div>
+{% endblock content %}

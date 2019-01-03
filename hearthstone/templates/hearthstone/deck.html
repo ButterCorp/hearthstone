@@ -1,0 +1,26 @@
+{% extends "hearthstone/base.html" %}
+
+{% block content %}
+<div class="row my-5">
+  <div class="col-md-12">
+    <h1>Deck : {{ deck.title }}</h1>
+
+    <a href="{% url 'deckUpdate' deck.pk %}" class="btn">Editer</a>
+    <a href="{% url 'deckDelete' deck.pk %}" class="btn">Supprimer</a>
+
+    <h2>Liste des cartes :</h2>
+    <div class="row">
+        {% for card in cards %}
+      <div class="col-3 text-center single-card my-4">
+          <img src="{{ card.img_url }}" alt="{{ card.card.name }}" class="img-thumbnail">
+      </div>
+      {% empty %}
+      <div class="col">
+        Vous n'avez pas encore de cartes.
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

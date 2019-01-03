@@ -1,0 +1,291 @@
+<style type="text/css">
+* { box-sizing: border-box; }
+
+body {
+  font-family: sans-serif;
+}
+
+/* ---- button ---- */
+
+.button {
+  display: inline-block;
+  padding: 0.5em 1.0em;
+  background: #EEE;
+  border: none;
+  border-radius: 7px;
+  background-image: linear-gradient( to bottom, hsla(0, 0%, 0%, 0), hsla(0, 0%, 0%, 0.2) );
+  color: #222;
+  font-family: sans-serif;
+  font-size: 16px;
+  text-shadow: 0 1px white;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #8CF;
+  text-shadow: 0 1px hsla(0, 0%, 100%, 0.5);
+  color: #222;
+}
+
+.button:active,
+.button.is-checked {
+  background-color: #28F;
+}
+
+.button.is-checked {
+  color: white;
+  text-shadow: 0 -1px hsla(0, 0%, 0%, 0.8);
+}
+
+.button:active {
+  box-shadow: inset 0 1px 10px hsla(0, 0%, 0%, 0.8);
+}
+
+/* ---- button-group ---- */
+
+.button-group:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.button-group .button {
+  float: left;
+  border-radius: 0;
+  margin-left: 0;
+  margin-right: 1px;
+}
+
+.button-group .button:first-child { border-radius: 0.5em 0 0 0.5em; }
+.button-group .button:last-child { border-radius: 0 0.5em 0.5em 0; }
+
+/* ---- isotope ---- */
+
+.grid {
+  background: #EEE;
+  max-width: 1200px;
+}
+
+/* clear fix */
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* ui group */
+
+.ui-group {
+  display: inline-block;
+}
+
+.ui-group h3 {
+  display: inline-block;
+  vertical-align: top;
+  line-height: 32px;
+  margin-right: 0.2em;
+  font-size: 16px;
+}
+
+.ui-group .button-group {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+/* color-shape */
+
+.color-shape {
+  width: 70px;
+  height: 70px;
+  margin: 5px;
+  float: left;
+}
+ 
+.color-shape.round {
+  border-radius: 35px;
+}
+ 
+.color-shape.big.round {
+  border-radius: 75px;
+}
+ 
+.color-shape.red { background: red; }
+.color-shape.blue { background: blue; }
+.color-shape.yellow { background: yellow; }
+ 
+.color-shape.wide, .color-shape.big { width: 150px; }
+.color-shape.tall, .color-shape.big { height: 150px; }
+</style>
+
+{% block content %}
+<h1>Isotope - combination filters with toggle buttons</h1>
+<h3>Color</h3>
+
+<div id="filter">
+
+  <input type="text" class="quicksearch" placeholder="Filter search...">
+
+  <div class="togglelist">
+    <a href="#" class="toggle-button"><span></span></a>
+  </div>
+
+  <div class="button-group" data-filter-group="type">
+    <button class="button is-checked" data-filter="*">show all</button>
+    <button class="button" data-filter=".Rogue">Voleur</button>
+    <button class="button" data-filter=".Priest">Prêtre</button>
+    <button class="button" data-filter=".Paladin">Paladin</button>
+    <button class="button" data-filter=".Warlock">Démoniste</button>
+    <button class="button" data-filter=".Mage">Mage</button>
+    <button class="button" data-filter=".Hunter">Chasseur</button>
+    <button class="button" data-filter=".Warrior">Guerrier</button>
+    <button class="button" data-filter=".Shaman">Chaman</button>
+    <button class="button" data-filter=".Druid">Druide</button>
+    <button class="button" data-filter=".Neutral">Neutre</button>
+    <button class="button" data-filter=".Spell">Spell</button>
+  </div>
+</div>
+
+<div id="sorts">
+  <div class="row">
+    <div class="column button-group">
+      <h3>Sort</h3>
+      <button class="button secondary" data-sort-by="original-order"> Original order</button>
+      <button class="button" data-sort-by="cost" data-sort-direction="asc"> Cost</button>
+    </div>
+  </div>
+</div>
+  
+
+<div class="container">
+  <div class="grid">
+    
+    <div class="row my-5">
+      <div class="col-md-12">
+        <h1>Votre collection de cartes</h1> {{ heroes }}
+        <div class="row">
+          {% for card in cards %}
+          <div class="player_class col-3 text-center single-card my-4 {{ card.card.playerClass }}">
+            <p hidden class="cost">{{ card.card.cost}} </p>
+            <p hidden class="name">{{ card.card.name}}</p>
+            <img src="{{ card.card.img_url }}" alt="{{ card.card.name }}" class="img-thumbnail">
+          </div>
+          {% empty %}
+          <div class="col">
+            Vous n'avez pas encore de cartes.
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+		
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+<!-- or -->
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+<script>
+
+
+
+
+$(document).ready( function() {
+
+// -------- Initialize Isotope ----------//
+$( function() {
+  // quick search regex
+  var qsRegex;
+  var buttonFilter;
+
+  var isoOptions = {
+      itemSelector: '.player_class',
+      filter: function() {
+        var $this = $(this);
+        var searchResult = qsRegex ? $this.text().match( qsRegex ) : true;
+        var buttonResult = buttonFilter ? $this.is( buttonFilter ) : true;
+        return searchResult && buttonResult;
+      },
+      getSortData: {
+        cost: '.cost parseInt'
+          }
+  };
+
+  // -------- List FUNCTION ----------//
+    var isIsotopeEnabled = true;
+    
+    // init Isotope
+    var $container = $('.grid').isotope( isoOptions );
+
+    
+
+    $('.toggle-button').click(function(){
+      $('.grid').toggleClass('listme');
+      $('.togglelist').toggleClass('toggleactive');
+    });
+
+
+  // -------- Filter FUNCTION ----------//
+  var filters = {};
+
+  $('#filter').on( 'click', '.button', function() {
+    var $this = $(this);
+    var $buttonGroup = $this.parents('.button-group');
+    var filterGroup = $buttonGroup.attr('data-filter-group');
+    filters[ filterGroup ] = $this.attr('data-filter');
+    var filterValue = '';
+    for ( var prop in filters ) {
+      filterValue += filters[ prop ];
+    }
+    buttonFilter = filterValue;
+    $container.isotope();
+  });
+
+  // -------- Sort FUNCTION ----------//
+  $('#sorts').on( 'click', '.button', function() {
+    var sortByValue = $(this).attr('data-sort-by');
+    $container.isotope({ sortBy: sortByValue });
+  });
+  
+  // -------- Search FUNCTION ----------//
+  var $quicksearch = $('.quicksearch').keyup( debounce( function() {
+    qsRegex = new RegExp( $quicksearch.val(), 'gi' );
+    $container.isotope();
+  }) );
+
+  
+  // -------- Active buttons ----------//
+  $('.button-group').each( function( i, buttonGroup ) {
+    var $buttonGroup = $( buttonGroup );
+    $buttonGroup.on( 'click', 'button', function() {
+      $buttonGroup.find('.secondary').removeClass('secondary');
+      $( this ).addClass('secondary');
+      $buttonGroup.find('.is-checked').removeClass('is-checked');
+      $( this ).addClass('is-checked');
+    });
+  });
+  
+});
+
+// -------- Debounce so filtering doesn't happen every millisecond ----------//
+function debounce( fn, threshold ) {
+  var timeout;
+  return function debounced() {
+    if ( timeout ) {
+      clearTimeout( timeout );
+    }
+    function delayed() {
+      fn();
+      timeout = null;
+    }
+    setTimeout( delayed, threshold || 100 );
+  };
+}
+
+
+});
+</script>

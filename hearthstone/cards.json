@@ -782,39 +782,6 @@
             "locale": "enUS"
         },
         {
-            "cardId": "BCON_024",
-            "dbfId": "49249",
-            "name": "Bottled Madness",
-            "cardSet": "Basic",
-            "type": "Spell",
-            "rarity": "Free",
-            "cost": 0,
-            "text": "Replace your hand with random Demons.",
-            "playerClass": "Warlock",
-            "img": "http://wow.zamimg.com/images/hearthstone/cards/enus/original/BCON_024.png",
-            "imgGold": "http://wow.zamimg.com/images/hearthstone/cards/enus/animated/BCON_024_premium.gif",
-            "locale": "enUS"
-        },
-        {
-            "cardId": "BCON_021",
-            "dbfId": "49246",
-            "name": "Crackling Doom",
-            "cardSet": "Basic",
-            "type": "Spell",
-            "rarity": "Free",
-            "cost": 0,
-            "text": "Deal $12 damage to all_minions.\\n<b>Overload</b>: (10)",
-            "playerClass": "Shaman",
-            "img": "http://wow.zamimg.com/images/hearthstone/cards/enus/original/BCON_021.png",
-            "imgGold": "http://wow.zamimg.com/images/hearthstone/cards/enus/animated/BCON_021_premium.gif",
-            "locale": "enUS",
-            "mechanics": [
-                {
-                    "name": "Overload"
-                }
-            ]
-        },
-        {
             "cardId": "CS2_013t",
             "dbfId": "1725",
             "name": "Excess Mana",
@@ -1233,25 +1200,6 @@
             ]
         },
         {
-            "cardId": "BCON_012",
-            "dbfId": "49237",
-            "name": "Hand of Salvation",
-            "cardSet": "Basic",
-            "type": "Spell",
-            "rarity": "Free",
-            "cost": 1,
-            "text": "<b>Secret:</b> When your second minion dies in a turn, return it to life.",
-            "playerClass": "Paladin",
-            "img": "http://wow.zamimg.com/images/hearthstone/cards/enus/original/BCON_012.png",
-            "imgGold": "http://wow.zamimg.com/images/hearthstone/cards/enus/animated/BCON_012_premium.gif",
-            "locale": "enUS",
-            "mechanics": [
-                {
-                    "name": "Secret"
-                }
-            ]
-        },
-        {
             "cardId": "NEW1_009",
             "dbfId": "764",
             "name": "Healing Totem",
@@ -1460,7 +1408,7 @@
             "type": "Minion",
             "faction": "Neutral",
             "rarity": "Common",
-            "cost": 1,
+            "cost": 0,
             "attack": 1,
             "health": 1,
             "race": "Murloc",
@@ -1594,20 +1542,6 @@
             "playerClass": "Neutral",
             "img": "http://wow.zamimg.com/images/hearthstone/cards/enus/original/skele11.png",
             "imgGold": "http://wow.zamimg.com/images/hearthstone/cards/enus/animated/skele11_premium.gif",
-            "locale": "enUS"
-        },
-        {
-            "cardId": "BCON_016",
-            "dbfId": "49241",
-            "name": "Smoke Bomb",
-            "cardSet": "Basic",
-            "type": "Spell",
-            "rarity": "Free",
-            "cost": 1,
-            "text": "Give a minion <b>Stealth</b> until your next turn. Draw a card.",
-            "playerClass": "Rogue",
-            "img": "http://wow.zamimg.com/images/hearthstone/cards/enus/original/BCON_016.png",
-            "imgGold": "http://wow.zamimg.com/images/hearthstone/cards/enus/animated/BCON_016_premium.gif",
             "locale": "enUS"
         },
         {
@@ -1986,20 +1920,6 @@
             "locale": "enUS"
         },
         {
-            "cardId": "BCON_001",
-            "dbfId": "49225",
-            "name": "Deadeye",
-            "cardSet": "Basic",
-            "type": "Spell",
-            "rarity": "Free",
-            "cost": 2,
-            "text": "For the rest of the game,\\nyour Hero Power can target minions.",
-            "playerClass": "Hunter",
-            "img": "http://wow.zamimg.com/images/hearthstone/cards/enus/original/BCON_001.png",
-            "imgGold": "http://wow.zamimg.com/images/hearthstone/cards/enus/animated/BCON_001_premium.gif",
-            "locale": "enUS"
-        },
-        {
             "cardId": "CS2_236",
             "dbfId": "1361",
             "name": "Divine Spirit",
@@ -2134,20 +2054,6 @@
                     "name": "Taunt"
                 }
             ]
-        },
-        {
-            "cardId": "BCON_015",
-            "dbfId": "49240",
-            "name": "Generous Spirit",
-            "cardSet": "Basic",
-            "type": "Spell",
-            "rarity": "Free",
-            "cost": 2,
-            "text": "[x]Choose a friendly minion.\\nGive it to your opponent\\nand draw 3 cards.",
-            "playerClass": "Priest",
-            "img": "http://wow.zamimg.com/images/hearthstone/cards/enus/original/BCON_015.png",
-            "imgGold": "http://wow.zamimg.com/images/hearthstone/cards/enus/animated/BCON_015_premium.gif",
-            "locale": "enUS"
         },
         {
             "cardId": "CS2_105",
@@ -2934,20 +2840,6 @@
                     "name": "Taunt"
                 }
             ]
-        },
-        {
-            "cardId": "BCON_008",
-            "dbfId": "49231",
-            "name": "Nature's Champion",
-            "cardSet": "Basic",
-            "type": "Spell",
-            "rarity": "Free",
-            "cost": 3,
-            "text": "Return a friendly minion to your hand and give it +5/+5.",
-            "playerClass": "Druid",
-            "img": "http://wow.zamimg.com/images/hearthstone/cards/enus/original/BCON_008.png",
-            "imgGold": "http://wow.zamimg.com/images/hearthstone/cards/enus/animated/BCON_008_premium.gif",
-            "locale": "enUS"
         },
         {
             "cardId": "CS2_122",
@@ -3905,20 +3797,6 @@
                     "name": "Battlecry"
                 }
             ]
-        },
-        {
-            "cardId": "BCON_004",
-            "dbfId": "49228",
-            "name": "Polymorph: ???",
-            "cardSet": "Basic",
-            "type": "Spell",
-            "rarity": "Free",
-            "cost": 5,
-            "text": "Choose a minion. <b>Discover</b> a new minion to transform it into.",
-            "playerClass": "Mage",
-            "img": "http://wow.zamimg.com/images/hearthstone/cards/enus/original/BCON_004.png",
-            "imgGold": "http://wow.zamimg.com/images/hearthstone/cards/enus/animated/BCON_004_premium.gif",
-            "locale": "enUS"
         },
         {
             "cardId": "CS2_237",
@@ -6644,7 +6522,7 @@
             "name": "Violet Apprentice",
             "cardSet": "Classic",
             "type": "Minion",
-            "cost": 1,
+            "cost": 0,
             "attack": 1,
             "health": 1,
             "playerClass": "Neutral",
@@ -9134,31 +9012,6 @@
             "locale": "enUS"
         },
         {
-            "cardId": "EX1_021",
-            "dbfId": "765",
-            "name": "Thrallmar Farseer",
-            "cardSet": "Classic",
-            "type": "Minion",
-            "faction": "Horde",
-            "rarity": "Common",
-            "cost": 3,
-            "attack": 2,
-            "health": 3,
-            "text": "<b>Windfury</b>",
-            "flavor": "He's stationed in the Hellfire Peninsula, but he's hoping for a reassignment closer to Orgrimmar, or really anywhere the ground is less on fire.",
-            "artist": "Efrem Palacios",
-            "collectible": true,
-            "playerClass": "Neutral",
-            "img": "http://media.services.zam.com/v1/media/byName/hs/cards/enus/EX1_021.png",
-            "imgGold": "http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_021_premium.gif",
-            "locale": "enUS",
-            "mechanics": [
-                {
-                    "name": "Windfury"
-                }
-            ]
-        },
-        {
             "cardId": "EX1_083",
             "dbfId": "570",
             "name": "Tinkmaster Overspark",
@@ -11236,27 +11089,6 @@
             "playerClass": "Warrior",
             "img": "http://media.services.zam.com/v1/media/byName/hs/cards/enus/EX1_411.png",
             "imgGold": "http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_411_premium.gif",
-            "locale": "enUS"
-        },
-        {
-            "cardId": "EX1_350",
-            "dbfId": "9",
-            "name": "Prophet Velen",
-            "cardSet": "Classic",
-            "type": "Minion",
-            "faction": "Neutral",
-            "rarity": "Legendary",
-            "cost": 7,
-            "attack": 7,
-            "health": 7,
-            "text": "Double the damage and healing of your spells and Hero Power.",
-            "flavor": "He's been exiled from his home, and all his brothers turned evil, but otherwise he doesn't have a lot to complain about.",
-            "artist": "Wei Wang",
-            "collectible": true,
-            "elite": true,
-            "playerClass": "Priest",
-            "img": "http://media.services.zam.com/v1/media/byName/hs/cards/enus/EX1_350.png",
-            "imgGold": "http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_350_premium.gif",
             "locale": "enUS"
         },
         {
@@ -16123,25 +15955,6 @@
                     "name": "Stealth"
                 }
             ]
-        },
-        {
-            "cardId": "GVG_064",
-            "dbfId": "2032",
-            "name": "Puddlestomper",
-            "cardSet": "Goblins vs Gnomes",
-            "type": "Minion",
-            "rarity": "Common",
-            "cost": 2,
-            "attack": 3,
-            "health": 2,
-            "flavor": "He pays homage to Morgl, the great murloc oracle! (Who doesn't??)",
-            "artist": "Jaemin Kim",
-            "collectible": true,
-            "race": "Murloc",
-            "playerClass": "Neutral",
-            "img": "http://media.services.zam.com/v1/media/byName/hs/cards/enus/GVG_064.png",
-            "imgGold": "http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/GVG_064_premium.gif",
-            "locale": "enUS"
         },
         {
             "cardId": "GVG_108",
@@ -23722,27 +23535,6 @@
             "img": "http://media.services.zam.com/v1/media/byName/hs/cards/enus/AT_035.png",
             "imgGold": "http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/AT_035_premium.gif",
             "locale": "enUS"
-        },
-        {
-            "cardId": "AT_005t",
-            "dbfId": "2543",
-            "name": "Boar",
-            "cardSet": "The Grand Tournament",
-            "type": "Minion",
-            "cost": 3,
-            "attack": 4,
-            "health": 2,
-            "text": "<b>Charge</b>",
-            "race": "Beast",
-            "playerClass": "Neutral",
-            "img": "http://wow.zamimg.com/images/hearthstone/cards/enus/original/AT_005t.png",
-            "imgGold": "http://wow.zamimg.com/images/hearthstone/cards/enus/animated/AT_005t_premium.gif",
-            "locale": "enUS",
-            "mechanics": [
-                {
-                    "name": "Charge"
-                }
-            ]
         },
         {
             "cardId": "AT_033",

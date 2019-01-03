@@ -1,0 +1,18 @@
+{% extends "hearthstone/base.html" %}
+
+{% block content %}
+<div class="row my-5">
+  <div class="col-md-12">
+    <h1>Voici vos nouvelles cartes :</h1>
+
+    <div class="row">
+      {% for card in cards %}
+      <div class="col-3 text-center single-card my-4">
+          <img src="{{ card.img_url }}" alt="..." class="img-thumbnail">
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

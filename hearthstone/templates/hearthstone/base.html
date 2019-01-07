@@ -114,7 +114,10 @@
 
 <!-- Boostratp JS -->
 <script>
-    $("select").imagepicker()
-  </script>
+    $("select").imagepicker({
+      limit: 30,
+      limit_reached: function(){alert('You\'ve selected 30 cards')}
+    });
+</script>
 </body>
 </html>

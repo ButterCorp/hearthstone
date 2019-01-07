@@ -1,6 +1,8 @@
 from django.http import HttpResponse, JsonResponse
 import json
 import os
+from django.shortcuts import render, redirect
+from hearthstone.models import Hero, Minion, Spell
 from hearthstone.models import Hero, Minion, Card, Spell, Deck, Party, UserCard
 from random import randint
 from pprint import pprint
@@ -151,7 +153,7 @@ def myDecks(request):
     return render(request, 'hearthstone/my-decks.html', {'decks': decksUser})
 
 
-def deck(request, deck_id):
+def deck(request):
     deck = get_object_or_404(Deck, pk=deck_id)# get deck passed in argument
     
     idCards = deck.cards
@@ -238,6 +240,5 @@ def updateDeck(request, deck_id):
         return render(request, 'hearthstone/update-deck.html', {'cards': cardsUser, 'deck': deck, 'cardsUsed' : cardsDeck})
 
 def shop(request):
-
     return render(request, 'hearthstone/shop.html')
 

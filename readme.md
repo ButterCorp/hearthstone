@@ -107,5 +107,23 @@ FOR:
     		<li style="color:#{{ code }}">{{ nom }}</li>
 	{% endfor %}
 
+## A faire pour la soutenance:
+
+> - échanger des cartes avec un autre joueur (troc)
+
+> - vendre des cartes
+
+> - jouer contre un autre joueur
+
+> - jouer contre un personnage non joueur, préconfiguré par l'administrateur
+
+> - suivre d'autres joueurs (vous aurez alors des informations sur leurs dernières actions dans votre flux
+d'actualité)
+
+> - discuter avec d'autres membres via des forums
+
+> - voir sa collection, et celle des autres joueurs
+
+> Des points seront attribués en plus si le serveur est mis en ligne.
 
 

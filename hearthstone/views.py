@@ -147,7 +147,7 @@ def buyCards(request, extension):
         for i in range(8):
             random_index = randint(0, cardsCounter - 1)
             card = Card.objects.filter(extension=extension)[random_index]
-            cards.append(card)
+            cards.append(card.img_url)
             userCard = UserCard(user=request.user, card = card)
             userCard.save()
         request.user.profile.credit -= 100
@@ -161,7 +161,7 @@ def buyCards(request, extension):
 
     #return render(request, 'hearthstone/buy-cards.html', {'cards': cards})
     #return HttpResponse(json.dumps(str(cards)))
-    return JsonResponse(json.dumps( str(cards) ), safe=False)
+    return HttpResponse(json.dumps(cards), content_type='application/json')
 
 def sellCard(request, carduser_id):
     card = get_object_or_404(CardUser, pk=carduser_id)

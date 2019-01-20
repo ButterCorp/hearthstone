@@ -70,6 +70,20 @@ def home(request):
     }
     return render(request, 'hearthstone/index.html', context)
 
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'registration/change_password.html', {
+        'form': form
+    })
 
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)    
@@ -260,7 +274,5 @@ def updateDeck(request, deck_id):
 
         return render(request, 'hearthstone/update-deck.html', {'cards': cardsUser, 'deck': deck, 'cardsUsed' : cardsDeck, 'card_in_deck': card_in_deck})
 
-
 def shop(request):
-
     return render(request, 'hearthstone/shop.html')

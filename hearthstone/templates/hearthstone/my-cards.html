@@ -57,6 +57,7 @@
         </div>
         <div class="row">
           {% for card in cards %}
+          <!-- TODO: check if card is spell or not to add filter -->
           <div class="player_class col-3 text-center single-card my-4 {{ card.card.playerClass }}">
               <p hidden class="cost">{{ card.card.cost}} </p>
               <p hidden class="name">{{ card.card.name}}</p>

@@ -1,6 +1,8 @@
 from django.http import HttpResponse, JsonResponse
 import json
 import os
+from django.shortcuts import render, redirect
+from hearthstone.models import Hero, Minion, Spell
 from hearthstone.models import Hero, Minion, Card, Spell, Deck, Party, UserCard
 from random import randint
 from pprint import pprint
@@ -246,3 +248,8 @@ def shop(request):
 
     return render(request, 'hearthstone/shop.html')
 
+    return HttpResponse("G g .")
+
+def deck(request):
+    heros = Hero.objects.all()
+    return render(request, 'deck/deck.html', {'heros': heros})

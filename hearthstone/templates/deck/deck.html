@@ -1,0 +1,17 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block title %}Hearthstone | Deck {% endblock %}
+
+{% block content %}
+
+<div class="row">
+    {% for h in heros %}
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="{% static 'img/hearthstone-portrait-'%}{{ h.playerClass }}.png" alt="Card image cap">
+            <div class="card-body">
+                <p class="card-text">{{ h.name }}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

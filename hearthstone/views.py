@@ -70,25 +70,20 @@ def home(request):
     }
     return render(request, 'hearthstone/index.html', context)
 
+
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)    
     decks = Deck.objects.filter(user_id=user_id)
     cards = UserCard.objects.filter(user_id=user_id)
-    post = Post.objects.order_by('-id').filter(id_author=user_id).all()
+    posts = Post.objects.order_by('-id').filter(id_author=user_id).all()
 
-    return render(request, 'hearthstone/profile.html', {'user_id': user_id, 'user': user, 'decks': decks, 'cards': cards})
-
-def post(request):
     if request.POST:
         content = request.POST.get('content', False)
         id_author = request.user
         p = Post.objects.create(post_content=content, id_author=id_author)
         p.save()
-        return 1
-    else:
-        return 0
 
-
+    return render(request, 'hearthstone/profile.html', {'user_id': user_id, 'user': user, 'decks': decks, 'cards': cards, 'posts': posts})
 
 def change_password(request):
     if request.method == 'POST':

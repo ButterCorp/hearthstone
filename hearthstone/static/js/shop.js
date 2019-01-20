@@ -9,6 +9,11 @@ $('#buyCardModal').on('show.bs.modal', function (event) {
 
   });
 
+  $('#buyCardModal').on('hide.bs.modal', function (event) {
+    $('div.row#zoneCard div#buy').show();
+    $("div.cardscards").remove();
+  });
+
   
 $('#buyCards').on('click', function() {
     buyCardsByExtension(recipient);
@@ -19,11 +24,12 @@ function buyCardsByExtension(recipient) {
         type: "GET",
         url: "/buy-cards/" + recipient,
         success: function (response) {
-            console.log(response);
-            $('div.row#zoneCard div#buy').remove();
-            $.each(response, function(i, item) {
-                console.log(item.card);
-            });
+            $('div.row#zoneCard div#buy').hide();
+
+            for(var r in response ) {
+                $('div.row#zoneCard').append('<div class="col-3 cardscards text-center single-card my-4"><img src="' + response[r] + '" class="img-thumbnail"></div>');
+            }
+
         },
         error: function (xhr, status, error) {
             alert("La requête n'a pas abouti. (status:" + xhr.status + ")");

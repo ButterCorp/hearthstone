@@ -24,6 +24,7 @@ class Deck(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     cards = models.TextField(blank=True) #use json.dumps(var) to insert cards
+    playerClass = models.TextField(max_length=50, blank=False, default="NaN")
     finished = models.BooleanField(default=False)
 
     def __str__(self):
@@ -42,6 +43,7 @@ class Card(models.Model):
     cost = models.IntegerField(default=0)
     img_url = models.TextField(max_length=255, blank=True)
     rarity = models.TextField(max_length=30, blank=True)
+    extension = models.TextField(max_length=60, blank=False, default="Basic")
 
     def __str__(self):
         return self.name

@@ -75,6 +75,12 @@
         {% endif %}
         <span class="flex-centered text-light">|</span>
         <li class="nav-item">
+          <a class="nav-link" href="{% url 'profile' request.user.id %}">
+              <button class="btn btn-outline-success">Profil</button>
+          </a>
+        </li>
+        <span class="flex-centered text-light">|</span>
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'app_logout' %}">
               <button class="btn btn-outline-danger">Deconnexion</button>
           </a>

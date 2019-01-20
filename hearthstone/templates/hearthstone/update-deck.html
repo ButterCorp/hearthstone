@@ -11,15 +11,15 @@
       {% csrf_token %}
       <div class="row"><input type="submit" class="btn" value="Enregistrer"></div>
       <div class="row">
-          {% for card in cardsUsed %}
+        <select multiple="multiple" class="image-picker show-html" name="cards">
+          {% for card in cards %}
           <div class="col-3 text-center single-card my-4">
-              <img src="{{ card.img_url }}" alt="{{ card.name }}" class="img-thumbnail">
+              <option data-img-src="{{ card.img_url }}" class="img-thumbnail" value="{{ card.id }}">
+                {{ card.card.name }}
+              </option>
           </div>
-        {% empty %}
-        <div class="col">
-          Vous n'avez pas encore de cartes.
-        </div>
-        {% endfor %}
+          {% endfor %}
+        </select>
       </div>
     </form>
   </div>

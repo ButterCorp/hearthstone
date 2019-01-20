@@ -1,0 +1,135 @@
+{% extends "hearthstone/base.html" %} {% load static %} {% block content %}
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-3">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png" width="170px" class="img-circle" alt="">
+        </div>
+        <div class="col-md-9">
+            <h2>{{ user.username }}</h2>
+            <h4>Member from : {{ user.date_joined }}</h4>
+        </div>
+    </div>
+    <nav class="mt-4">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-posts-tab" data-toggle="tab" href="#nav-posts" role="tab" aria-controls="nav-posts"
+                aria-selected="false">Posts</a>
+            <a class="nav-item nav-link" id="nav-cards-tab" data-toggle="tab" href="#nav-cards" role="tab" aria-controls="nav-cards"
+                aria-selected="true">Cards</a>
+            <a class="nav-item nav-link" id="nav-decks-tab" data-toggle="tab" href="#nav-decks" role="tab" aria-controls="nav-decks"
+                aria-selected="false">Decks</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active mt-4" id="nav-posts" role="tabpanel" aria-labelledby="nav-posts-tab">
+            {% if request.user == user %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-8">
+                        <label for="textarea">Send a post</label>
+                        <textarea class="form-control" id="textarea" rows="3" name="content"></textarea>
+                        <!-- 
+                        <input type="text" class="form-control" name="content" id="content" placeholder="Message" />
+                        -->
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success" id="sendButton">Send</button>
+                    </div>
+                </div>
+            </form>
+            {% endif %} 
+            
+            {% for p in posts %}
+            <div class="card mt-4">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ p.id_author }}</h5>
+                      <span class="right">{{ p.created_at|date:"M/d"|lower }}</span>
+                      <hr>
+                      <p class="card-text mt-4">{{ p.post_content }}</p>
+                      {% if p.id_author_id == request.user.id %}
+                      <a href="#" class="btn btn-warning">Editer</a>
+                      <a href="#" class="btn btn-danger">Supprimer</a>
+                      {% endif %}
+                    </div>
+                  </div>
+            {% empty %}
+            <li>Il n'y a pas encore de publications</li>
+            {% endfor %}
+        </div>
+        <div class="tab-pane fade mt-4" id="nav-cards" role="tabpanel" aria-labelledby="nav-cards-tab">
+            <div id="filter">
+                <input type="text" class="quicksearch" placeholder="Filter search...">
+
+                <div class="togglelist">
+                    <a href="#" class="toggle-button">
+                        <span></span>
+                    </a>
+                </div>
+
+                <div class="button-group" data-filter-group="type">
+                    <button class="button is-checked" data-filter="*">show all</button>
+                    <button class="button" data-filter=".Rogue">Voleur</button>
+                    <button class="button" data-filter=".Priest">Prêtre</button>
+                    <button class="button" data-filter=".Paladin">Paladin</button>
+                    <button class="button" data-filter=".Warlock">Démoniste</button>
+                    <button class="button" data-filter=".Mage">Mage</button>
+                    <button class="button" data-filter=".Hunter">Chasseur</button>
+                    <button class="button" data-filter=".Warrior">Guerrier</button>
+                    <button class="button" data-filter=".Shaman">Chaman</button>
+                    <button class="button" data-filter=".Druid">Druide</button>
+                    <button class="button" data-filter=".Neutral">Neutre</button>
+                    <button class="button" data-filter=".Spell">Spell</button>
+                </div>
+
+                <h1>({{ cards|length }}) cartes</h1>
+
+            </div>
+
+
+
+            <div class="container_test">
+                <div class="grid_test">
+
+                    <div class="row my-5">
+                        <div class="col-md-12">
+
+                            <div class="row">
+                                {% for card in cards %}
+                                <div class="player_class col-3 text-center single-card my-4 {{ card.card.playerClass }}">
+                                    <p hidden class="cost">{{ card.card.cost}} </p>
+                                    <p hidden class="name">{{ card.card.name}}</p>
+                                    <img src="{{ card.card.img_url }}" alt="{{ card.card.name }}" class="img-thumbnail">
+                                </div>
+
+                                {% empty %}
+                                <div class="col">
+                                    Vous n'avez pas encore de cartes.
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade mt-4" id="nav-decks" role="tabpanel" aria-labelledby="nav-decks-tab">
+            <div class="row">
+                {% for deck in decks %}
+                <div class="col-3 text-center my-4">
+                    <img class="card-img-top" src="{% static 'img/hearthstone-portrait-'%}{{ deck.playerClass }}.png" alt="Card image cap">
+                    <a href="{% url 'deck' deck.id %}">{{deck.title}}</a>
+                </div>
+                {% empty %}
+                <div class="col">
+                    {{ user.username }} n'a pas encore de decks
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'js/my-cards.isotope.js' %}"></script>
+<script src="{% static 'js/profile.js' %}"></script> {% endblock %}

@@ -5,8 +5,8 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('deck', views.deck, name='deck'),
     path('home/', views.home, name='home'),
+    path('profile/<int:user_id>', views.profile, name='profile'),
     path('register/', views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='app_login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='app_logout'),
@@ -14,6 +14,7 @@ urlpatterns = [
     path('sell-card/<int:herouser_id>', views.sellCard, name='sellCard'),
     path('buy-cards/<extension>', views.buyCards, name='buyCards'),
     path('shop/', views.shop, name='shop'),
+    path('post/', views.post, name='post'),
     path('my-cards/', views.myCards, name='myCards'),
     path('my-decks/', views.myDecks, name='myDecks'),
     path('deck/<int:deck_id>', views.deck, name='deck'),

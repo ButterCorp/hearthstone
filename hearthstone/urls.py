@@ -6,12 +6,16 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('home/', views.home, name='home'),
+    path('profile/<int:user_id>', views.profile, name='profile'),
+    path('profile/follow/<int:user_id>', views.follow, name='follow'),
+    path('profile/unfollow/<int:user_id>', views.unfollow, name='unfollow'),
     path('register/', views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='app_login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='app_logout'),
     path('party/', views.party, name='game'),
     path('sell-card/<int:herouser_id>', views.sellCard, name='sellCard'),
-    path('buy-cards/', views.buyCards, name='buyCards'),
+    path('buy-cards/<extension>', views.buyCards, name='buyCards'),
+    path('shop/', views.shop, name='shop'),
     path('my-cards/', views.myCards, name='myCards'),
     path('my-decks/', views.myDecks, name='myDecks'),
     path('deck/<int:deck_id>', views.deck, name='deck'),
@@ -19,4 +23,5 @@ urlpatterns = [
     path('deck/update/<int:deck_id>', views.updateDeck, name='deckUpdate'),
     path('deck/create', views.createDeck, name='deckCreate'),
     path('deck/create/<int:hero_id>', views.createDeckByHero, name='createDeckByHero'),
+    path('change-password/', views.change_password, name='change_password'),
 ]

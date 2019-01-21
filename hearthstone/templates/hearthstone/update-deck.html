@@ -6,20 +6,20 @@
     <h1>Deck : {{ deck.title }}</h1>
 
     <h2>Choisissez vos cartes :</h2>
-    <p>Nombre de cartes <span id="card_number"></span>/30</p>
+    <p>Nombre de cartes <span id="card_number">{{ cardsUsed|length }}</span>/30</p>
     <form method="post">
       {% csrf_token %}
       <div class="row"><input type="submit" class="btn" value="Enregistrer"></div>
       <div class="row">
+        <select multiple="multiple" class="image-picker show-html" name="cards">
           {% for card in cards %}
           <div class="col-3 text-center single-card my-4">
-              <img src="{{ card.card.img_url }}" alt="{{ card.card.name }}" class="img-thumbnail">
+              <option data-img-src="{{ card.img_url }}" class="img-thumbnail" value="{{ card.id }}">
+                {{ card.name }}
+              </option>
           </div>
-        {% empty %}
-        <div class="col">
-          Vous n'avez pas encore de cartes.
-        </div>
-        {% endfor %}
+          {% endfor %}
+        </select>
       </div>
     </form>
   </div>
@@ -27,8 +27,7 @@
 </div>
 
 <script type="text/javascript">
-  $('#card_number').text($('.card.selected').length);
-  $('.card').on('click', function () {
+ /* $('.card').on('click', function () {
     if ($('.card.selected').length >= 30) {
       alert("vous ne pouvez pas avoir plus de 30 cartes dans un deck");
       return;
@@ -41,7 +40,7 @@
       $(this).next('input').prop('checked', true);
     }
     $('#card_number').text($('.card.selected').length);
-  })
+  }) */
 </script>
 
 {% endblock content %}

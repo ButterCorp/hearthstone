@@ -5,8 +5,12 @@
   <div class="col-md-12">
     <h1>Deck : {{ deck.title }}</h1>
 
+    {% if request.user == userOwner %}
+
     <a href="{% url 'deckUpdate' deck.pk %}" class="btn">Editer</a>
     <a href="{% url 'deckDelete' deck.pk %}" class="btn">Supprimer</a>
+
+    {% endif %}
 
     <h2>Liste des cartes :</h2>
     <div class="row">

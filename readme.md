@@ -9,6 +9,8 @@
 
 Let's navigate to http://localhost:8000
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
  # Philosophie Django
  
  Installation sur windows, suivre ce tutoriel docker pour ne pas s'embourber avec les endpoints :

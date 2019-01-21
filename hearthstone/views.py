@@ -12,6 +12,7 @@ from .forms import UserRegisterForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import PasswordChangeForm
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     if not Hero.objects.all():
@@ -85,18 +86,45 @@ def change_password(request):
     })
 
 def profile(request, user_id):
-    user = get_object_or_404(User, pk=user_id)    
+    profileUser = get_object_or_404(User, pk=user_id)    
     decks = Deck.objects.filter(user_id=user_id)
-    cards = user.profile.cards.all()
+    cards = profileUser.profile.cards.all()
+    is_followed = Follow.objects.filter(followed=profileUser.profile, follower=request.user.profile).count()
     posts = Post.objects.order_by('-id').filter(id_author=user_id).all()
-
+    follower_count = Follow.objects.filter(followed=profileUser.profile).count()
     if request.POST:
         content = request.POST.get('content', False)
         id_author = request.user
         p = Post.objects.create(post_content=content, id_author=id_author)
         p.save()
 
-    return render(request, 'hearthstone/profile.html', {'user_id': user_id, 'user': user, 'decks': decks, 'cards': cards, 'posts': posts})
+    return render(request, 'hearthstone/profile.html', 
+    {'user_id': user_id, 'profileUser': profileUser, 'decks': decks, 'cards': cards, 'posts': posts, 'follower_count' : follower_count, 'is_followed' : is_followed})
+
+@csrf_exempt
+def follow(request, user_id):
+    if request.method == 'POST':
+        currentUser = User.objects.get(pk=request.user.id).profile
+        user = User.objects.get(pk = user_id).profile
+        if len(Follow.objects.filter(follower=currentUser, followed=user)) == 0:
+            Follow.objects.create(follower=currentUser, followed=user)
+            return JsonResponse({'status': 'ok'})
+        else:
+            return JsonResponse({'false': 'ok'})
+
+
+@csrf_exempt
+def unfollow(request, user_id):
+    if request.method == 'POST':
+        currentUser = User.objects.get(pk=request.user.id).profile
+        user = User.objects.get(pk = user_id).profile
+        if len(Follow.objects.filter(follower=currentUser, followed=user)) == 0:
+            return
+        f = Follow.objects.filter(follower=currentUser, followed=user)
+        f.delete()
+        return JsonResponse({'status': 'ok'})
+    else:
+        return JsonResponse({'false': 'ok'})
 
 def change_password(request):
     if request.method == 'POST':

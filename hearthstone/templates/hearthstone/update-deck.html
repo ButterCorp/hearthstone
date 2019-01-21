@@ -15,7 +15,7 @@
           {% for card in cards %}
           <div class="col-3 text-center single-card my-4">
               <option data-img-src="{{ card.img_url }}" class="img-thumbnail" value="{{ card.id }}">
-                {{ card.card.name }}
+                {{ card.name }}
               </option>
           </div>
           {% endfor %}

@@ -96,10 +96,10 @@
 
                             <div class="row">
                                 {% for card in cards %}
-                                <div class="player_class col-3 text-center single-card my-4 {{ card.card.playerClass }}">
-                                    <p hidden class="cost">{{ card.card.cost}} </p>
-                                    <p hidden class="name">{{ card.card.name}}</p>
-                                    <img src="{{ card.card.img_url }}" alt="{{ card.card.name }}" class="img-thumbnail">
+                                <div class="player_class col-3 text-center single-card my-4 {{ card.playerClass }}">
+                                    <p hidden class="cost">{{ card.cost}} </p>
+                                    <p hidden class="name">{{ card.name}}</p>
+                                    <img src="{{ card.img_url }}" alt="{{ card.name }}" class="img-thumbnail">
                                 </div>
 
                                 {% empty %}

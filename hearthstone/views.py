@@ -2,8 +2,7 @@ from django.http import HttpResponse, JsonResponse
 import json
 import os
 from django.shortcuts import render, redirect
-from hearthstone.models import Hero, Minion, Spell
-from hearthstone.models import Hero, Minion, Card, Spell, Deck, Party, UserCard, Post
+from hearthstone.models import Hero, Minion, Card, Spell, Deck, Party, Post, Follow
 from random import randint
 from pprint import pprint
 from django.shortcuts import render, redirect, get_object_or_404
@@ -88,7 +87,7 @@ def change_password(request):
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)    
     decks = Deck.objects.filter(user_id=user_id)
-    cards = UserCard.objects.filter(user_id=user_id)
+    cards = user.profile.cards.all()
     posts = Post.objects.order_by('-id').filter(id_author=user_id).all()
 
     if request.POST:
@@ -130,8 +129,8 @@ def register(request):
             )
             login(request, new_user)
             for c in Card.objects.filter(rarity="Free"):
-                UserCard.objects.create(user = new_user, card = c)
-        
+                new_user.profile.cards.add(c)
+            new_user.save()
             return redirect('home')
     else:
         form = UserRegisterForm()
@@ -148,8 +147,7 @@ def buyCards(request, extension):
             random_index = randint(0, cardsCounter - 1)
             card = Card.objects.filter(extension=extension)[random_index]
             cards.append(card.img_url)
-            userCard = UserCard(user=request.user, card = card)
-            userCard.save()
+            request.user.profile.cards.add(card)
         request.user.profile.credit -= 100
         request.user.save()
     elif request.user.is_authenticated and request.user.profile.credit < 100:
@@ -162,30 +160,28 @@ def buyCards(request, extension):
     #return render(request, 'hearthstone/buy-cards.html', {'cards': cards})
     #return HttpResponse(json.dumps(str(cards)))
     return HttpResponse(json.dumps(cards), content_type='application/json')
-
-def sellCard(request, carduser_id):
-    card = get_object_or_404(CardUser, pk=carduser_id)
+def sellCard(request, card_id):
+    card = request.user.profile.objects.filter(cards__pk=card_id)
     card.delete()
     request.user.profile.credit += 10
     request.user.save()
     return redirect('myCards')
 
-
 def myCards(request):
-    cards = UserCard.objects.filter(user_id=request.user.id)
+    cards = request.user.profile.cards.all()
 
     return render(request, 'hearthstone/my-cards.html', {'cards': cards})
 
 
 def myDecks(request):
-    decksUser = Deck.objects.all().filter(user_id=request.user.id)
+    decksUser = request.user.deck_set.all()
 
     return render(request, 'hearthstone/my-decks.html', {'decks': decksUser})
 
 
 def deck(request, deck_id):
     deck = get_object_or_404(Deck, pk=deck_id)# get deck given in argument
-    userOwner = get_object_or_404(User, pk=deck.user_id)
+    userOwner = get_object_or_404(User, pk=deck.user.id)
     
     idCards = deck.cards
 
@@ -247,29 +243,17 @@ def updateDeck(request, deck_id):
         deck = get_object_or_404(Deck, pk=deck_id)# get deck passed in argument
     
         idCards = deck.cards
-
-        cards = Card.objects.filter(id__in=json.loads(idCards))
-
-        for card in cards:
-            card.delete()
-
- 
-
-        for key, value in cards:
-            if key[:4] == 'card':
-                cardId = key.split('_')[1]
-
-                card = get_object_or_404(Card, pk=cardId)
-
-                cardDeck = CardDeck(card=card, deck=deck)
-                cardDeck.save()
+        cards = request.POST.getlist("cards", "")
+        cards = list(map(int, cards))
+        deck.cards = cards
+        deck.save()
 
         return redirect('deck', deck.pk)
     else:
         deck = get_object_or_404(Deck, pk=deck_id)# get deck passed in argument
         idCards = deck.cards
         card_in_deck = Card.objects.filter(id__in=json.loads(idCards))
-        cardsUser = UserCard.objects.filter(user_id=request.user.id)#cartes de l'user
+        cardsUser = request.user.profile.cards.all()#cartes de l'user
         cardsDeck = Card.objects.filter(id__in=json.loads(deck.cards))#cartes du deck
 
         return render(request, 'hearthstone/update-deck.html', {'cards': cardsUser, 'deck': deck, 'cardsUsed' : cardsDeck, 'card_in_deck': card_in_deck})

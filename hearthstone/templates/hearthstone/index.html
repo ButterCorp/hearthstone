@@ -30,6 +30,41 @@
           </a>       
         </div>
     </div>
+    <div class="col-md-12 page-header">
+        <h1 id="timeline">Feed</h1>
+    </div>
+    <div class="col-md-12">
+        <ul class="row timeline">       
+            {% for p in posts %}
+    
+                    {% for userFollowed in listFollowed %}
+                        {% if userFollowed.followed.user.id == p.id_author.id %}
+                          {% if forloop.counter0|divisibleby:2 %}
+                          <li class="col-md-12">
+                              <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
+                          {% else %}
+                            <li class="timeline-inverted">
+                              <div class="timeline-badge warning"><i class="glyphicon glyphicon-credit-card"></i></div>
+                          {% endif %}
+                            <div class="timeline-panel">
+                              <div class="timeline-heading">
+                                <h4 class="timeline-title"><a href="{% url 'profile' p.id_author.id %}">{{ p.id_author  }}</a></h4>
+                                <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>{{ p.created_at|date:"M/d"|lower }}</small></p>
+                              </div>
+                              <div class="timeline-body">
+                                <p>{{ p.post_content }}</p>
+                              </div>
+                            </div>
+                          </li>
+                        {% endif %}
+                  {% endfor %}
+              {% empty %}
+                <li>Sorry, no tweet avaiable... Start by follow some body?</li>
+            {% endfor %}
+          </ul>
+    </div>
+      
+    </div>
       <!--
           <h2>Liste des dernières parties</h2>
           <div class="games mb-5">
@@ -44,6 +79,7 @@
         </div>
       </div>
 </div>
+
 {% endif %}
 
 {% endblock content %}

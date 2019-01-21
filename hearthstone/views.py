@@ -61,14 +61,21 @@ def index(request):
                 
     return render(request, 'hearthstone/index.html')
 
+
 def home(request):
     title = 'Accueil'
-    context = {
-        'title': title,
-        'parties': Party.objects.all(),
-        'Hero': Hero.objects.all(),
-    }
-    return render(request, 'hearthstone/index.html', context)
+    nbpost, nbfollower, nbfollowed, listFollowed, posts = 0,0, 0, 0, 0
+    if request.user.is_authenticated:
+        nbpost = Post.objects.filter(id_author=request.user.id).count()
+        nbfollower = Follow.objects.filter(followed=request.user.id).count()
+        nbfollowed = Follow.objects.filter(follower=request.user.id).count()
+        listFollowed = Follow.objects.filter(follower=request.user.profile).all() # TODO : recuperer un tableau d'ID a la place d'un QuerySet<>
+
+    list_user = User.objects.all() #Liste user contient la liste de tous les utilisateurs inscrits
+    posts = Post.objects.order_by('-id').all()
+
+    return render(request, 'hearthstone/index.html', {'nbpost': nbpost, 'nbfollower': nbfollower, 'nbfollowed': nbfollowed,
+                                                    'list_user': list_user, 'listFollowed': listFollowed, 'posts' : posts})
 
 def change_password(request):
     if request.method == 'POST':

@@ -9,7 +9,7 @@ django-heroku
 pytz
 
 # Postgres Database Adapter (requires 'python-dev' and 'libpq-dev' packages in Ubuntu)
-psycopg2
+psycopg2-binary
 
 # Database config loader
 dj-database-url

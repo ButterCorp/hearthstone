@@ -24,9 +24,6 @@ class Profile(models.Model):
     credit = models.IntegerField(default=200)
     cards = models.ManyToManyField(Card)
 
-    def __str__(self):
-        return self.username
-
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -85,7 +82,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False, verbose_name="created")
     updated_at = models.DateTimeField(auto_now_add=True, auto_now=False, verbose_name="updated")
     id_author = models.ForeignKey(User, on_delete=models.CASCADE,)
-
+    
     def __str__(self):
         return self.id
 

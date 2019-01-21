@@ -6,8 +6,24 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/User_Circle.png" width="170px" class="img-circle" alt="">
         </div>
         <div class="col-md-9">
-            <h2>{{ user.username }}</h2>
-            <h4>Member from : {{ user.date_joined }}</h4>
+            <h2>{{ profileUser.username }} - <span class="followers-number">{{ follower_count }}</span>  followers</h2>
+            <h4>Member from : {{ profileUser.date_joined }}</h4>
+            <div class="follow-buttons">
+                {% if profileUser != user %}
+                        {% if is_followed %}
+                            <button class="btn btn-outline-info follow"
+                            data-follow="unfollow" data-user="{{ profileUser.id }}">
+                                Unfollow
+                            </button>
+                        {% endif %}
+                        {% if not is_followed %}
+                            <button class="btn btn-outline-info follow"
+                                    data-follow="follow" data-user="{{ profileUser.id }}">
+                                    Follow
+                            </button>
+                        {% endif %}
+                {% endif %}
+        </div>
         </div>
     </div>
     <nav class="mt-4">
@@ -22,7 +38,7 @@
     </nav>
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active mt-4" id="nav-posts" role="tabpanel" aria-labelledby="nav-posts-tab">
-            {% if request.user == user %}
+            {% if profileUser == user %}
             <form method="POST">
                 {% csrf_token %}
                 <div class="row">
@@ -47,7 +63,7 @@
                       <span class="right">{{ p.created_at|date:"M/d"|lower }}</span>
                       <hr>
                       <p class="card-text mt-4">{{ p.post_content }}</p>
-                      {% if p.id_author_id == request.user.id %}
+                      {% if profileUser == user %}
                       <a href="#" class="btn btn-warning">Editer</a>
                       <a href="#" class="btn btn-danger">Supprimer</a>
                       {% endif %}
@@ -96,10 +112,10 @@
 
                             <div class="row">
                                 {% for card in cards %}
-                                <div class="player_class col-3 text-center single-card my-4 {{ card.card.playerClass }}">
-                                    <p hidden class="cost">{{ card.card.cost}} </p>
-                                    <p hidden class="name">{{ card.card.name}}</p>
-                                    <img src="{{ card.card.img_url }}" alt="{{ card.card.name }}" class="img-thumbnail">
+                                <div class="player_class col-3 text-center single-card my-4 {{ card.playerClass }}">
+                                    <p hidden class="cost">{{ card.cost}} </p>
+                                    <p hidden class="name">{{ card.name}}</p>
+                                    <img src="{{ card.img_url }}" alt="{{ card.name }}" class="img-thumbnail">
                                 </div>
 
                                 {% empty %}
@@ -132,4 +148,4 @@
 
 <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
 <script src="{% static 'js/my-cards.isotope.js' %}"></script>
-<script src="{% static 'js/profile.js' %}"></script> {% endblock %}
+<script src="{% static 'js/follow.js' %}"></script> {% endblock %}

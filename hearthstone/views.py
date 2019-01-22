@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import PasswordChangeForm
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.safestring import mark_safe
 
 def index(request):
     if not Hero.objects.all():
@@ -76,6 +77,11 @@ def home(request):
 
     return render(request, 'hearthstone/index.html', {'nbpost': nbpost, 'nbfollower': nbfollower, 'nbfollowed': nbfollowed,
                                                     'list_user': list_user, 'listFollowed': listFollowed, 'posts' : posts})
+
+def room(request, room_name):
+    return render(request, 'hearthstone/room.html', {
+        'room_name_json': mark_safe(json.dumps(room_name))
+    })
 
 def change_password(request):
     if request.method == 'POST':

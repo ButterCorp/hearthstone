@@ -24,4 +24,5 @@ urlpatterns = [
     path('deck/create', views.createDeck, name='deckCreate'),
     path('deck/create/<int:hero_id>', views.createDeckByHero, name='createDeckByHero'),
     path('change-password/', views.change_password, name='change_password'),
+    path('chat/<room_name>', views.room, name='room'),
 ]

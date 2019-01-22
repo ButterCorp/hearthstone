@@ -31,6 +31,9 @@
         </div>
     </div>
     <div class="col-md-12 page-header">
+       Dans quel salon de chat voulez vous entrer?<br/>
+        <input id="room-name-input" class="form-control form-control-lg" type="text" size="100" placeholder="Ecrire ici ..." /><br/>
+        <input id="room-name-submit" class="btn btn-primary mb-2" type="button" value="Entrer"/>
         <h1 id="timeline">Feed</h1>
     </div>
     <div class="col-md-12">
@@ -79,7 +82,20 @@
         </div>
       </div>
 </div>
-
+{% load static %}
+<script>
+    document.querySelector('#room-name-input').focus();
+    document.querySelector('#room-name-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#room-name-submit').click();
+        }
+    };
+    
+    document.querySelector('#room-name-submit').onclick = function(e) {
+        var roomName = document.querySelector('#room-name-input').value;
+        window.location.pathname = '/chat/' + roomName ;
+    };
+    </script>
 {% endif %}
 
-{% endblock content %}
+{% endblock %}

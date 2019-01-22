@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'polls.apps.PollsConfig',
     'hearthstone.apps.HearthstoneConfig',
     'django.contrib.admin',
@@ -69,7 +70,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'website.wsgi.application'
 
 
 # Database
@@ -134,3 +134,14 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'kilsekure@gmail.com'
 EMAIL_HOST_PASSWORD = 'diouriyouri'
+
+# Channels
+ASGI_APPLICATION = 'website.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}

@@ -253,3 +253,11 @@ def shop(request):
 def deck(request):
     heros = Hero.objects.all()
     return render(request, 'deck/deck.html', {'heros': heros})
+
+def disenchantCards(request, card_id):
+    card = UserCard.objects.filter(card_id=card_id, user_id=request.user.id).first().delete()#cartes de l'user
+    request.user.profile.credit += 15
+    request.user.save()
+    return redirect('myCards')
+
+

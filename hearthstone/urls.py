@@ -22,4 +22,5 @@ urlpatterns = [
     path('deck/create', views.createDeck, name='deckCreate'),
     path('deck/create/<int:hero_id>', views.createDeckByHero, name='createDeckByHero'),
     path('change-password/', views.change_password, name='change_password'),
+    path('disenchant-cards/<int:card_id>', views.disenchantCards, name='disenchantCards')
 ]
